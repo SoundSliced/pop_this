@@ -2,7 +2,7 @@
 
 A powerful and customizable Flutter package for managing popups, toasts, and overlays. `pop_this` provides an easy-to-use API for displaying widgets on top of your application with support for animations, stacking (navigation history within popups), auto-dismissal timers, and preset success/error overlays.
 
-![Example](example/assets/example.gif)
+![Example](https://raw.githubusercontent.com/SoundSliced/pop_this/main/example/assets/example.gif)
 
 ## Features
 
@@ -24,6 +24,37 @@ dependencies:
 ```
 
 ## Usage
+
+### Setup
+
+Before using PopThis, wrap your `MaterialApp` with `OverlaySupport.global()` and `Sizer`:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:pop_this/pop_this.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return OverlaySupport.global(
+          child: MaterialApp(
+            title: 'PopThis Example',
+            home: const MyHomePage(),
+          ),
+        );
+      },
+    );
+  }
+}
+```
 
 ### Basic Usage
 
@@ -53,7 +84,10 @@ PopThis.pop(
   context: context,
   duration: Duration(seconds: 3),
   showTimer: true, // Shows a circular countdown timer
-  child: Text("I will disappear in 3 seconds"),
+  child: Container(
+    padding: EdgeInsets.all(20),
+    child: Text("I will disappear in 3 seconds"),
+  ),
 );
 ```
 
@@ -73,17 +107,73 @@ PopThis.showErrorOverlay(
 );
 ```
 
+### Stacked Popups
+
+```dart
+PopThis.pop(
+  context: context,
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text('First Popup'),
+      ElevatedButton(
+        onPressed: () {
+          PopThis.pop(
+            context: context,
+            child: Text('Second Popup - Use back button to go back!'),
+          );
+        },
+        child: Text('Open Another Popup'),
+      ),
+    ],
+  ),
+);
+```
+
 ### Advanced Customization
 
 ```dart
 PopThis.pop(
   context: context,
-  blurBackground: true, // Blur the background
+  shouldBlurBackgroundOverlayLayer: true, // Blur the background
   dismissBarrierColor: Colors.black.withOpacity(0.5),
+  popBackgroundColor: Colors.purple.shade50,
   popUpAnimationDuration: 0.5, // Animation duration in seconds
+  hasShadow: true,
+  shadowColor: Colors.purple,
+  popPositionOffset: Offset(20, 100), // Custom position
   child: YourCustomWidget(),
 );
 ```
+
+### Dismissing Popups
+
+```dart
+// Dismiss the current popup
+PopThis.dismissPopThis();
+
+// Dismiss with animation
+PopThis.animatedDismissPopThis();
+
+// Go back to previous popup in the stack
+PopThis.animatedDismissPopThis(shouldPopBackToPreviousWidget: true);
+
+// Check if a popup is currently active
+if (PopThis.isPopThisActive()) {
+  // Do something
+}
+```
+
+## Examples
+
+Check out the [example folder](https://github.com/SoundSliced/pop_this/tree/main/example) for a complete working example demonstrating all features:
+
+- Simple popups
+- Auto-dismiss with timer
+- Success and error overlays
+- Stacked popups with navigation
+- Custom styled popups
+- Positioned popups
 
 ## License
 

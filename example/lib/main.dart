@@ -33,48 +33,71 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.green.shade50,
       appBar: AppBar(
         title: const Text('PopThis Example'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Text(
+                'Basic Examples',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   PopThis.pop(
                     context: context,
                     child: Container(
-                      height: 200,
-                      width: 300,
-                      alignment: Alignment.center,
-                      child: const Text('Simple Popup'),
+                      padding: const EdgeInsets.all(20),
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: const Text(
+                        'Simple Popup\n\nTap outside to dismiss',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   );
                 },
                 child: const Text('Simple Popup'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   PopThis.pop(
                     context: context,
-                    duration: const Duration(seconds: 3),
+                    duration: const Duration(seconds: 5),
                     showTimer: true,
                     child: Container(
-                      height: 150,
-                      width: 250,
-                      alignment: Alignment.center,
-                      child: const Text('Auto Dismiss with Timer'),
+                      padding: const EdgeInsets.all(20),
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: const Text(
+                        'Auto Dismiss with Timer\n\nThis popup will automatically close in 5 seconds',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   );
                 },
                 child: const Text('Popup with Timer'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   PopThis.showSuccessOverlay(
                     successMessage: 'Operation Successful!',
@@ -83,8 +106,12 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: const Text('Success Overlay'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   PopThis.showErrorOverlay(
                     errorMessage: 'Something went wrong!',
@@ -93,50 +120,163 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: const Text('Error Overlay'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 32),
+              const Text(
+                'Advanced Examples',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   PopThis.pop(
                     context: context,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('First Popup'),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            PopThis.pop(
-                              context: context,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text('Second Popup (Stacked)'),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      PopThis.pop(
-                                        context: context,
-                                        child: Container(
-                                          height: 150,
-                                          width: 200,
-                                          alignment: Alignment.center,
-                                          child: const Text('Third Popup!'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'First Popup',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'You can stack multiple popups!\nClick the button below to open another popup.',
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              PopThis.pop(
+                                context: context,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Second Popup (Stacked)',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      );
-                                    },
-                                    child: const Text('Open Third Popup'),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      const Text(
+                                        'Notice the back button appeared!\nYou can go back to the previous popup.',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          PopThis.pop(
+                                            context: context,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(20),
+                                              constraints: const BoxConstraints(
+                                                maxWidth: 250,
+                                              ),
+                                              child: const Text(
+                                                'Third Popup!\n\nUse the back button to navigate through the popup stack.',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Open Third Popup'),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                          child: const Text('Open Another Popup'),
-                        ),
-                      ],
+                                ),
+                              );
+                            },
+                            child: const Text('Open Another Popup'),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
                 child: const Text('Stacked Popups'),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  PopThis.pop(
+                    context: context,
+                    popBackgroundColor: Colors.purple.shade50,
+                    dismissBarrierColor: Colors.purple.withOpacity(0.5),
+                    shouldBlurBackgroundOverlayLayer: true,
+                    popUpAnimationDuration: 0.6,
+                    hasShadow: true,
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.palette,
+                            size: 50,
+                            color: Colors.purple,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Custom Styled Popup',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.purple,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'This popup has custom colors, blur effect, and custom animation duration!',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Custom Styled Popup'),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  PopThis.pop(
+                    context: context,
+                    popPositionOffset: const Offset(20, 100),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      constraints: const BoxConstraints(maxWidth: 250),
+                      child: const Text(
+                        'Positioned Popup\n\nThis popup appears at a custom position on the screen!',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Positioned Popup'),
               ),
             ],
           ),

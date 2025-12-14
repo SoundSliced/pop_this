@@ -35,10 +35,14 @@ void main() {
 
     // Tap the button to show the popup
     await tester.tap(find.text('Show Pop'));
-    await tester.pump(); // Start animation
-    await tester.pump(const Duration(seconds: 1)); // Finish animation
+    await tester.pumpAndSettle();
 
     // Verify popup is shown
     expect(find.text('Hello PopThis'), findsOneWidget);
+  });
+
+  test('PopThis package exports necessary classes', () {
+    // This test verifies the package structure is correct
+    expect(PopThis, isNotNull);
   });
 }
