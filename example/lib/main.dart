@@ -216,7 +216,7 @@ class MyHomePage extends StatelessWidget {
                   PopThis.pop(
                     context: context,
                     popBackgroundColor: Colors.purple.shade50,
-                    dismissBarrierColor: Colors.purple.withOpacity(0.5),
+                    dismissBarrierColor: Colors.purple.withValues(alpha: 0.5),
                     shouldBlurBackgroundOverlayLayer: true,
                     popUpAnimationDuration: 0.6,
                     hasShadow: true,
