@@ -20,7 +20,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  pop_this: ^1.0.0
+  pop_this: ^1.0.1
 ```
 
 ## Usage

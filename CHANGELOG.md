@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Updated `s_button` dependancy  
+
 ## 1.0.0
 
 * Initial release of `pop_this` package.
