@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pop_this/pop_this.dart';
-import 'package:sizer/sizer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,19 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return OverlaySupport.global(
-          child: MaterialApp(
-            title: 'PopThis Example',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              useMaterial3: true,
-            ),
-            home: const MyHomePage(),
-          ),
-        );
-      },
+    return MaterialApp(
+      title: 'PopThis Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(),
     );
   }
 }

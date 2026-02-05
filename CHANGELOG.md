@@ -1,3 +1,14 @@
+## 2.0.0
+
+* **BREAKING CHANGE**: Removed `overlay_support` package dependency
+  * Now uses native Flutter overlay system
+  * **Automatic Setup**: No manual wrapper required! PopThis automatically sets up the overlay system when first used
+  * Simply remove `OverlaySupport.global` wrapper from your MaterialApp - everything works automatically
+  * **Migration**: Remove the `OverlaySupport.global` wrapper from your code
+* Improved performance by using direct overlay management
+* Simplified package dependencies
+* Fixed: Automatically wraps overlay content with `Sizer` package to ensure responsive sizing
+
 ## 1.0.1
 
 * Updated `s_button` dependancy  

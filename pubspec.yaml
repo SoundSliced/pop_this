@@ -1,6 +1,6 @@
 name: pop_this
 description: A powerful and customizable Flutter package for managing popups, toasts, and overlays with support for animations, stacking, and timers.
-version: 1.0.1
+version: 2.0.0
 homepage: https://github.com/SoundSliced/pop_this
 repository: https://github.com/SoundSliced/pop_this
 issue_tracker: https://github.com/SoundSliced/pop_this/issues
@@ -13,7 +13,6 @@ dependencies:
   flutter:
     sdk: flutter
   pausable_timer: ^3.1.0+3
-  overlay_support: ^2.1.0
   lucide_icons: ^0.257.0
   circular_countdown_timer: ^0.2.4
   states_rebuilder_extended: ^1.0.3

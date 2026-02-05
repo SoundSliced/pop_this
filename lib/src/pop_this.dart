@@ -9,7 +9,6 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 import 'package:s_button/s_button.dart';
 import 'package:sizer/sizer.dart';
@@ -63,6 +62,9 @@ class PopThis {
     final BorderRadiusGeometry? overlayBackgroundBorderRadius,
     final Curve newWidgetResizeAnimationCurve = Curves.easeInOutBack,
   }) async {
+    // Ensure the overlay system is installed before showing the popup
+    _PopThisBootstrapper.ensureInstalled(context: context);
+
     //if the widget tree is built
     if (WidgetsBinding.instance.isRootWidgetAttached) {
       if (shouldSaveThisPop == false && PopThis.isPopThisActive()) {
@@ -207,7 +209,7 @@ class PopThis {
               _shouldSavePreviousPop.state = false;
             }
 
-            _popThisController.state = showOverlay(
+            _popThisController.state = _showCustomOverlay(
               (context, opacity) => OnBuilder(
                   listenTo: _poppedWidgets,
                   builder: () {
@@ -429,7 +431,7 @@ class PopThis {
 
         //then show the Secondary Temp popup
 
-        _secondaryTempPopThisController.state = showOverlay(
+        _secondaryTempPopThisController.state = _showCustomOverlay(
           (context, opacity) => Material(
             type: MaterialType.transparency,
             child: ClipRRect(
@@ -704,7 +706,7 @@ class PopThis {
     if (WidgetsBinding.instance.isRootWidgetAttached) {
       if (errorMessage == null) {
         _errorOverlayController.refresh();
-        _errorOverlayController.state = showOverlay(
+        _errorOverlayController.state = _showCustomOverlay(
           (context, opacity) {
             return SButton(
               borderRadius: BorderRadius.circular(30),
@@ -798,7 +800,7 @@ class PopThis {
     if (WidgetsBinding.instance.isRootWidgetAttached) {
       if (successMessage == null && successMessageWidget == null) {
         _successOverlayController.refresh();
-        _successOverlayController.state = showOverlay(
+        _successOverlayController.state = _showCustomOverlay(
           (context, opacity) {
             return SButton(
               borderRadius: BorderRadius.circular(30),
@@ -880,6 +882,110 @@ class PopThis {
   static void dismissSuccessOverlay() {
     _successOverlayController.state?.dismiss();
     PopThis.animatedDismissPopThis();
+  }
+}
+
+///****************************************** */
+///     BOOTSTRAPPER AUTO-INSTALLATION      ///
+///******************************************* */
+
+/// Internal bootstrapper that automatically installs the overlay system
+/// into the root widget tree when PopThis.pop() is first called.
+class _PopThisBootstrapper {
+  static OverlayState? _overlayState;
+  static bool _installScheduled = false;
+
+  /// Ensures the overlay system is available.
+  /// Called automatically when PopThis.pop() is invoked.
+  static void ensureInstalled({BuildContext? context}) {
+    // If we already have an overlay state, nothing to do
+    if (_overlayState != null) return;
+
+    // Prevent multiple installation attempts
+    if (_installScheduled) return;
+    _installScheduled = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _installScheduled = false;
+
+      // Double-check if already found
+      if (_overlayState != null) return;
+
+      // Find and cache the root overlay
+      _overlayState = _resolveRootOverlay(context);
+    });
+  }
+
+  /// Resolves the root OverlayState from the widget tree.
+  static OverlayState? _resolveRootOverlay(BuildContext? context) {
+    // Try to get overlay from provided context
+    if (context != null) {
+      final overlay = Overlay.maybeOf(context, rootOverlay: true);
+      if (overlay != null) return overlay;
+    }
+
+    // Fallback: traverse the widget tree to find the root overlay
+    final rootElement = WidgetsBinding.instance.rootElement;
+    if (rootElement == null) return null;
+
+    OverlayState? found;
+
+    void visit(Element element) {
+      if (found != null) return;
+      if (element is StatefulElement && element.state is OverlayState) {
+        found = element.state as OverlayState;
+        return;
+      }
+      element.visitChildElements(visit);
+    }
+
+    visit(rootElement);
+    return found;
+  }
+
+  /// Gets the cached overlay state, or tries to resolve it
+  static OverlayState? get overlayState {
+    if (_overlayState != null) return _overlayState;
+    _overlayState = _resolveRootOverlay(null);
+    return _overlayState;
+  }
+}
+
+/// Helper function to show a custom overlay with auto-dismiss support
+OverlayEntry _showCustomOverlay(
+  Widget Function(BuildContext, double) builder, {
+  Duration? duration,
+  BuildContext? context,
+}) {
+  // Ensure overlay system is available
+  _PopThisBootstrapper.ensureInstalled(context: context);
+
+  final overlayState = _PopThisBootstrapper.overlayState;
+  if (overlayState == null) {
+    throw Exception(
+      'PopThis: Could not find an Overlay in the widget tree. '
+      'Make sure your app has a MaterialApp or WidgetsApp.',
+    );
+  }
+
+  final entry = OverlayEntry(
+    builder: (context) => Sizer(
+      builder: (sizerContext, orientation, deviceType) {
+        return builder(sizerContext, 1.0);
+      },
+    ),
+  );
+
+  overlayState.insert(entry);
+  return entry;
+}
+
+/// Extension to add dismiss method to OverlayEntry
+extension _OverlayEntryDismiss on OverlayEntry {
+  void dismiss() {
+    if (mounted) {
+      remove();
+    }
   }
 }
 
@@ -1000,12 +1106,12 @@ final _onDismissTimerController = RM.inject<_OnDismissController?>(
 final _shouldAnimateOutNotifier = ValueNotifier<bool>(false);
 
 // controller used privately by PopThis package in order to call the popup overlay and dismiss it
-final _popThisController = RM.inject<OverlaySupportEntry?>(
+final _popThisController = RM.inject<OverlayEntry?>(
   () => null,
   autoDisposeWhenNotUsed: true,
 );
 
-final _secondaryTempPopThisController = RM.inject<OverlaySupportEntry?>(
+final _secondaryTempPopThisController = RM.inject<OverlayEntry?>(
   () => null,
   autoDisposeWhenNotUsed: true,
 );
@@ -1042,12 +1148,12 @@ void refreshPopThisControllers() {
 
 //**************************************************** */
 
-final _errorOverlayController = RM.inject<OverlaySupportEntry?>(
+final _errorOverlayController = RM.inject<OverlayEntry?>(
   () => null,
   autoDisposeWhenNotUsed: true,
 );
 
-final _successOverlayController = RM.inject<OverlaySupportEntry?>(
+final _successOverlayController = RM.inject<OverlayEntry?>(
   () => null,
   autoDisposeWhenNotUsed: true,
 );

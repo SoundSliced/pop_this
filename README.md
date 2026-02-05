@@ -7,6 +7,7 @@ A powerful and customizable Flutter package for managing popups, toasts, and ove
 ## Features
 
 - **Easy Popup Management**: Show any widget as a popup with a single function call.
+- **Automatic Setup**: No manual wrapper required! PopThis automatically sets up the overlay system when first used.
 - **Stacked Popups**: Open multiple popups on top of each other. The package automatically handles navigation history, allowing users to go back to previous popups.
 - **Auto-Dismissal**: Built-in timer support to automatically dismiss popups after a specified duration.
 - **Customizable Animations**: Control entry and exit animations, durations, and curves.
@@ -20,14 +21,16 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  pop_this: ^1.0.1
+  pop_this: ^2.0.0
 ```
 
 ## Usage
 
 ### Setup
 
-Before using PopThis, wrap your `MaterialApp` with `OverlaySupport.global()` and `Sizer`:
+**No setup required!** PopThis automatically handles the overlay system initialization when you first call `PopThis.pop()`.
+
+If you're using `Sizer` for responsive sizing (optional), simply wrap your `MaterialApp`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -44,11 +47,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return OverlaySupport.global(
-          child: MaterialApp(
-            title: 'PopThis Example',
-            home: const MyHomePage(),
-          ),
+        // No wrapper needed - PopThis handles everything automatically!
+        return MaterialApp(
+          title: 'PopThis Example',
+          home: const MyHomePage(),
         );
       },
     );

@@ -4,4 +4,3 @@
 library;
 
 export 'src/pop_this.dart';
-export 'package:overlay_support/overlay_support.dart';

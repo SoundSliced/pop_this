@@ -8,22 +8,21 @@ void main() {
     await tester.pumpWidget(
       Sizer(
         builder: (context, orientation, deviceType) {
-          return OverlaySupport.global(
-            child: MaterialApp(
-              home: Scaffold(
-                body: Builder(
-                  builder: (context) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        PopThis.pop(
-                          context: context,
-                          child: const Text('Hello PopThis'),
-                        );
-                      },
-                      child: const Text('Show Pop'),
-                    );
-                  },
-                ),
+          // No OverlaySupport.global needed - PopThis handles it automatically
+          return MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      PopThis.pop(
+                        context: context,
+                        child: const Text('Hello PopThis'),
+                      );
+                    },
+                    child: const Text('Show Pop'),
+                  );
+                },
               ),
             ),
           );
