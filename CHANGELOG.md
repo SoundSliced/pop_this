@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Documentation updated
+
 ## 2.0.0
 
 * **BREAKING CHANGE**: Removed `overlay_support` package dependency

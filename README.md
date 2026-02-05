@@ -21,7 +21,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  pop_this: ^2.0.0
+  pop_this: ^2.0.1
 ```
 
 ## Usage
@@ -138,7 +138,7 @@ PopThis.pop(
 PopThis.pop(
   context: context,
   shouldBlurBackgroundOverlayLayer: true, // Blur the background
-  dismissBarrierColor: Colors.black.withOpacity(0.5),
+  dismissBarrierColor: Colors.black.withValues(alpha: 0.5),
   popBackgroundColor: Colors.purple.shade50,
   popUpAnimationDuration: 0.5, // Animation duration in seconds
   hasShadow: true,

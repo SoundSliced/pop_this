@@ -22,7 +22,17 @@ import 'package:states_rebuilder_extended/states_rebuilder_extended.dart';
 ///
 ///
 
+/// A utility class for displaying popup overlays and toast-like notifications.
+///
+/// [PopThis] provides methods to show customizable popup widgets on top of your app,
+/// with support for animations, timers, and styling options.
 class PopThis {
+  /// Creates a new instance of [PopThis].
+  ///
+  /// This class is designed to be used with static methods, so you typically
+  /// won't need to instantiate it directly.
+  PopThis();
+
   /// Popup a Widget in front of your screen.
   ///
   ///[child] : the Widget you want to popup - popIt will show an empty small box if no child is given
@@ -550,9 +560,15 @@ class PopThis {
 
   //----------------------------------------------//
 
-  //function to dismiss toast overlay
-  //by default, the previous widget in the list of popped widgets within the same overlay, will be called, until the first widget's turn, then it'll dismiss the whole overlay,
-  //if the user wishes a total dismissal of the overlay (without going through the previous popped widget history, then shouldPopToPreviousWidget needs to be declared as false)
+  /// Dismisses the currently active PopThis overlay.
+  ///
+  /// By default, if there are multiple widgets in the pop history and
+  /// [shouldPopBackToPreviousWidget] is true, this will navigate back to the
+  /// previous widget in the stack. Otherwise, it dismisses the entire overlay.
+  ///
+  /// - [onDismissExtraCallback]: Optional callback to execute when dismissing.
+  /// - [shouldPopBackToPreviousWidget]: If true, navigates to the previous widget
+  ///   in the pop history instead of dismissing the entire overlay. Defaults to false.
   static void dismissPopThis({
     VoidCallback? onDismissExtraCallback,
     bool shouldPopBackToPreviousWidget = false,
@@ -610,6 +626,17 @@ class PopThis {
 
   //----------------------------------------------//
 
+  /// Dismisses the PopThis overlay with an animated transition.
+  ///
+  /// This method plays a dismissal animation (fade out and subtle scale down)
+  /// before removing the overlay. The animation duration is 60% of the original
+  /// popup animation duration for a snappier feel.
+  ///
+  /// - [onDismissExtraCallback]: Optional callback to execute after dismissal.
+  /// - [shouldPopBackToPreviousWidget]: If true, navigates to the previous widget
+  ///   in the pop history instead of dismissing the entire overlay. Defaults to false.
+  ///
+  /// Returns a [Future] that completes when the animation finishes and the overlay is dismissed.
   static Future<void> animatedDismissPopThis({
     VoidCallback? onDismissExtraCallback,
     bool shouldPopBackToPreviousWidget = false,
@@ -640,7 +667,15 @@ class PopThis {
 
   //----------------------------------------------//
 
-  //function to dismiss secondary temp popup with animation
+  /// Dismisses the secondary temporary PopThis overlay with an animated transition.
+  ///
+  /// This method is specifically for dismissing secondary/temporary pop overlays that were
+  /// shown with [isSecondaryTemporarySinglePop] set to true. It plays a dismissal animation
+  /// before removing the overlay.
+  ///
+  /// - [onDismissExtraCallback]: Optional callback to execute after dismissal.
+  ///
+  /// Returns a [Future] that completes when the animation finishes and the overlay is dismissed.
   static Future<void> animatedDismissSecondaryTempPopThis({
     VoidCallback? onDismissExtraCallback,
   }) async {
@@ -779,6 +814,10 @@ class PopThis {
 
   //---------------------------------------------//
 
+  /// Dismisses both the error overlay and any active PopThis overlay.
+  ///
+  /// This method removes any error overlay created by [showErrorOverlay]
+  /// and also calls [animatedDismissPopThis] to dismiss the main PopThis overlay.
   static void dismissErrorOverlay() {
     _errorOverlayController.state?.dismiss();
     PopThis.animatedDismissPopThis();
