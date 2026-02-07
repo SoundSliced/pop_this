@@ -3,4 +3,4 @@
 /// This library exports all public APIs for the pop_this package.
 library;
 
-export 'src/pop_this.dart';
+export 'package:s_packages/s_packages.dart';
