@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+ 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pop_this/pop_this.dart';
-import 'package:sizer/sizer.dart';
+ 
 
 void main() {
   testWidgets('PopThis.pop shows a widget', (WidgetTester tester) async {
