@@ -21,7 +21,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  pop_this: ^3.0.0
+  pop_this: ^3.0.1
 ```
 
 ## Usage
